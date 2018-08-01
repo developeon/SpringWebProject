@@ -125,7 +125,6 @@
 </script>
 </head>
 <body>
-<%@ include file="../include/member_menu.jsp" %>
 <h2>게시글 보기</h2>
 <form name="form1" method="post">
     <div>        <!-- 원하는 날짜형식으로 출력하기 위해 fmt태그 사용 -->

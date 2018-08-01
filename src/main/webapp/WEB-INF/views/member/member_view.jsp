@@ -28,7 +28,6 @@
 
 </head>
 <body>
-<%@ include file="../include/member_menu.jsp" %>
     <h2>회원정보 상세</h2>
     <form name="form1" method="post">
         <table border="1" width="400px">

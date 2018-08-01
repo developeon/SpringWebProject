@@ -37,8 +37,6 @@
 </script>
 </head>
 <body>
-<%@ include file="../include/member_menu.jsp" %>
-
 <h2>게시글 작성</h2>
 
 

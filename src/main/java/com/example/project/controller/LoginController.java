@@ -29,28 +29,23 @@ public class LoginController {
     
     // 02. 로그인 처리
     @RequestMapping("loginCheck.do")
-    public ModelAndView loginCheck(@ModelAttribute MemberVO vo, HttpSession session){
+    public String loginCheck(@ModelAttribute MemberVO vo, HttpSession session){
         boolean result = loginService.loginCheck(vo, session);
         ModelAndView mav = new ModelAndView();
         if (result == true) { // 로그인 성공
-            // main.jsp로 이동
-            mav.setViewName("login/home");
-            mav.addObject("msg", "success");
+        	return "redirect:../";
         } else {    // 로그인 실패
             // login.jsp로 이동
-            mav.setViewName("login/login");
-            mav.addObject("msg", "failure");
+        	session.setAttribute("msg", "failure");
+        	return "redirect:login.do";
         }
-        return mav;
+       
     }
     
     // 03. 로그아웃 처리
     @RequestMapping("logout.do")
-    public ModelAndView logout(HttpSession session){
+    public String logout(HttpSession session){
         loginService.logout(session);
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("login/login");
-        mav.addObject("msg", "logout");
-        return mav;
+        return "redirect:../";
     }
 }

@@ -49,14 +49,9 @@ public class BoardController {
     	 
          int start=boardPager.getPageBegin();
          int end=boardPager.getPageEnd();
-         System.out.println(start);
-         System.out.println(end);
          System.out.println((int)Math.ceil((2-1)/10));
         List<BoardVO> list = boardService.listAll(start,end,searchOption, keyword);
-       
-        
-       
-        
+
         // ModelAndView - ¸ðµ¨°ú ºä
         ModelAndView mav = new ModelAndView();
         
@@ -110,14 +105,6 @@ public class BoardController {
     //4. ¼öÁ¤
     @RequestMapping("update.do")
     public String update(@ModelAttribute BoardVO vo) {
-    	
-    	System.out.println(vo.getBno());
-    	System.out.println(vo.getWriter());
-    	System.out.println(vo.getContent());
-    	
-    	
-    	
-    	
     	boardService.update(vo);
     	return "redirect:list.do";
     }

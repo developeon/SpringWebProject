@@ -3,6 +3,7 @@ package com.example.project.controller;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,9 +36,10 @@ public class MemberController {
 	
 	//02-01. 회원 등록 한 뒤 처리하는 방법
 	@RequestMapping("member/insert.do")
-	public String memberInsert(@ModelAttribute MemberVO vo ) {
+	public String memberInsert(@ModelAttribute MemberVO vo, HttpSession session ) {
 		memberService.insertMember(vo);
-		return "redirect:/member/list.do";
+		session.setAttribute("msg", "success");
+		return "redirect:../login/login.do";
 	}
 	
 	
@@ -70,16 +72,12 @@ public class MemberController {
    @RequestMapping("member/delete.do")
    
    public String memberDelete(@ModelAttribute MemberVO vo, Model model) {
- //  public String memberDelete(@RequestParam String userId, @RequestParam String userPw, Model model) {
-	 //  boolean result=memberService.checkPw(userId, userPw);
 	   boolean result=memberService.checkPw(vo.getUserId(), vo.getUserPw());
 	   if(result) {
-		  // memberService.deleteMember(userId);
 		   memberService.deleteMember(vo.getUserId());
 		   return "redirect:/member/list.do";
 	   }else {
 		   model.addAttribute("message","비번 불일치");
-		  // model.addAttribute("dto",memberService.viewMember(userId));
 		   model.addAttribute("dto",memberService.viewMember(vo.getUserId()));
 		   return "member/member_view"; 
 	   }
