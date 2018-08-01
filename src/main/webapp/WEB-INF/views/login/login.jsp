@@ -29,12 +29,6 @@
 	</script>
 </head>
 <body>
-	<c:if test="${sessionScope.userId != null}">
-	<%
-		response.sendRedirect("${path}/");
-	%>
-	</c:if>
-
     <nav class="navbar navbar-default">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed"
@@ -54,6 +48,7 @@
 						aria-expanded="false">접속하기<span class="caret"></span></a>
 					<ul class="dropdown-menu">
 						<li><a href="${path}/">메인</a></li>
+						<li><a href="../board/list.do">게시판</a></li>
 						<li class="active"><a href="#">로그인</a></li>
 						<li><a href="../member/write.do">회원가입</a></li>
 					</ul>

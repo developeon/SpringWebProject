@@ -20,6 +20,7 @@
     			data : param,
     			success : function(){
     				alert("댓글이 등록되었습니다.");
+    				$('#replytext').val("");
     				//listReply2();
     				listReply();
     			}
@@ -78,45 +79,14 @@
         
         // 게시글 수정 버튼 클릭이벤트
         $("#btnUpdete").click(function(){
-            var title = $("#title").val();
-            var content = $("#content").val();
-            var writer = $("#writer").val();
-            if(title == ""){
-                alert("제목을 입력하세요");
-                document.form1.title.focus();
-                return;
-            }
-            if(content == ""){
-                alert("내용을 입력하세요");
-                document.form1.content.focus();
-                return;
-            }
-            /* if(writer == ""){
-                alert("이름을 입력하세요");
-                document.form1.writer.focus();
-                return;
-            } */
-            alert(title);
-            alert(content);
-            alert(writer);
-          		
-
-                     
-            document.form1.action="${path}/board/update.do"
-            // 폼에 입력한 데이터를 서버로 전송
-            document.form1.submit();
             
         });
+        
+        // 목록 버튼 클릭 이벤트
         $("#btnList").click(function(){
-
     		location.href="${path}/board/list.do?curPage=${curPage}&searchOption=${searchOption}&keyword=${keyword}";
-                 alert("이름을dd 입력하세요");	
-    		//location.href="${path}/board/list.do";
-              //   document.form1.action = "${path}/board/list.do";
-               //  document.form1.submit();
-
-    		});
-
+    	});
+        
     });
     
     
@@ -125,50 +95,113 @@
 </script>
 </head>
 <body>
-<h2>게시글 보기</h2>
-<form name="form1" method="post">
-    <div>        <!-- 원하는 날짜형식으로 출력하기 위해 fmt태그 사용 -->
-        작성일자 : <fmt:formatDate value="${dto.regdate}" pattern="yyyy-MM-dd a HH:mm:ss"/>
-                <!-- 날짜 형식 => yyyy 4자리연도, MM 월, dd 일, a 오전/오후, HH 24시간제, hh 12시간제, mm 분, ss 초 -->
-    </div>
-    <div>
-        조회수 : ${dto.viewcnt}
-    </div>
-    <div>
-        제목
-        <input name="title" id="title" size="80" value="${dto.title}" placeholder="제목을 입력해주세요">
-    </div>
-    <div>
-        내용
-        <textarea name="content" id="content" rows="4" cols="80" placeholder="내용을 입력해주세요">
-        ${dto.content}</textarea>
-    </div>
-    <div>
-        이름
-      <!--   <input name="writer" value="${dto.writer}" placeholder="이름을 입력해주세요"> -->
-      ${dto.writer}
-      
-       <input type="hidden" name="writer" id="writer" value="${dto.writer}">
-       
-    </div>
-    <div style="width:650px; text-align: center;">
-        <!-- 게시물번호를 hidden으로 처리 -->
-        <input type="hidden" name="bno" value="${dto.bno}">
-   	  <c:if test="${sessionScope.userId==dto.writer }">
-        <button type="button" id="btnUpdete">수정</button>
-        <button type="button" id="btnDelete">삭제</button>
-      </c:if>   
-       <button type="button" id="btnList">목록</button>  
-    </div>
-    
-</form>
-<div style="width:600px;text-align:center">
-	<c:if test="${sessionScope.userId != null }">
-		<textarea rows="5" cols="80" id="replytext" placeholder="댓글을 작성하세요."></textarea>
-		<br>
-		<button type="button" id="btnReply">댓글쓰기</button>
-	</c:if>
-</div>
-<div id="listReply"></div>
+	<nav class="navbar navbar-default">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed"
+				data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+				aria-expanded="false">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="${path}/">와글와글</a>
+		</div>
+		<div class="collpase navbar-collapse" id ="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<c:choose>
+      			   		<c:when test="${sessionScope.userId != null}">
+      			   			<a href="#" class="dropdown-toggle"
+							data-toggle="dropdown" role="button" aria-haspopup="ture"
+							aria-expanded="false">${sessionScope.userName}<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="${path}/">메인</a></li>
+								<li class="active"><a href="#">게시판</a></li>
+								<li><a href="login/logout.do">로그아웃</a></li>
+							</ul>
+     					</c:when>
+       		 			<c:otherwise>
+	       		 			<a href="#" class="dropdown-toggle"
+							data-toggle="dropdown" role="button" aria-haspopup="ture"
+							aria-expanded="false">접속하기<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="${path}/">메인</a></li>
+								<li class="active"><a href="#">게시판</a></li>
+								<li><a href="../login/login.do">로그인</a></li>
+								<li><a href="../member/write.do">회원가입</a></li>
+							</ul>
+			       	 	</c:otherwise>
+   					</c:choose>
+				</li>
+			</ul>
+		</div>
+	</nav>
+	
+    <div class="container">
+    	<form name="form1" method="post">
+    		<input type="hidden" name="bno" value="${dto.bno}">
+			<table class="table table-bordered table-hover" style="text-align:center;border:1px solid #dddddd">
+				<thead>
+			    	<tr>
+			    		<td colspan="4"><h4>게시물 보기</h4></td>
+			    		</tr>
+			    </thead>
+			    <tbody>
+			    		<tr>
+			    			<td style="width: 110px;"><h5>제목</h5></td>
+			    			<td colspan="3"><h5>${dto.title}</h5></td>
+			    		</tr>
+			    		<tr>
+			    			<td style="width: 110px;"><h5>작성자</h5></td>
+			    			<td colspan="3"><h5>${dto.writer}</h5></td>
+			    		</tr>
+			    		<tr>
+	   						<td><h5>작성일</h5></td>
+			    			<td><h5><fmt:formatDate value="${dto.regdate}" pattern="yyyy-MM-dd a HH:mm:ss"/></h5></td>
+			    			<td><h5>조회수</h5></td>
+			    			<td><h5>${dto.viewcnt}</h5></td>
+			    		</tr>
+			    		<tr>
+			    			<td style="width: 110px;"><h5>내용</h5></td>
+			    			<td colspan="3"><h5>${dto.content}</h5></td>
+			    		</tr>
+			    		<c:if test="${sessionScope.userId==dto.writer }">
+			    		<tr>
+			    			<td colspan="4" style="text-align: right;">
+			    				<button type="button" class="btn btn-primary" id="btnUpdete">수정</button>
+			    				<button type="button" class="btn btn-primary" id="btnDelete">삭제</button>
+			        		</td>
+			    		</tr>
+			    		</c:if>
+			    </tbody>
+			</table>
+		</form>
+		<div style="text-align: center;"><button type="button" class="btn btn-default" id="btnList">목록</button></div>
+	</div>
+
+	<div style="width:600px;text-align:center">
+		<c:if test="${sessionScope.userId != null }">
+			<textarea rows="5" cols="80" id="replytext" placeholder="댓글을 작성하세요."></textarea>
+			<br>
+			<button type="button" id="btnReply">댓글쓰기</button>
+		</c:if>
+	</div>
+	<div id="listReply"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>
