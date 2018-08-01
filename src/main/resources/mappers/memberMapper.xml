@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <!-- 다른 mapper와 중복되지 않도록 네임스페이스를 적도록 하자 -->
+    <mapper namespace="member">
+      <select id="memberList" resultType="com.example.project.model.dto.MemberVO">
+    
+        select
+          user_id as userId,
+          user_name as userName,
+          user_email as userEmail,
+          user_regdate as userRegdate
+        from tbl_member
+        order by userName 
+        
+      </select>
+      
+      <!-- 회원 등록 -->
+      <insert id="insertMember">
+        insert into tbl_member(user_id,user_pw,user_name,user_email)
+        values(#{userId}, #{userPw}, #{userName}, #{userEmail})
+      </insert>
+      
+      <!--  회원정보 상세보기 -->          
+      <select id="viewMember" resultType="com.example.project.model.dto.MemberVO">
+       select
+         user_id AS userId,
+         user_name AS userName,
+         user_email AS userEmail,
+         user_regdate AS userRegdate,
+         user_updatedate AS userUpdatedate
+       from tbl_member
+       where user_id=#{userId}
+      
+      </select>
+      
+      <update id="updateMember">
+         update tbl_member
+         set
+           user_pw=#{userPw},
+           user_name=#{userName},
+           user_email=#{userEmail},
+           user_updatedate=now()
+         where
+           user_id=#{userId}
+      </update>
+      
+     <delete id="deleteMember">
+       delete from tbl_member
+       where user_id=#{userId}
+     
+     </delete>
+      <select id="checkPw" resultType="int">
+        select count(*)
+        from tbl_member
+        where user_id=#{userId} AND user_pw=#{userPw}
+      </select>
+     
+    </mapper>
+    
+    
+    
